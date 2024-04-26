@@ -1,11 +1,9 @@
 from selenium.webdriver.common.by import By
-from data import ScooterData
 
 
 class OrderPageLocators:
 
-    top_order_button = [By.XPATH, ".//div[contains(@class, 'Header')]/button[text()='Заказать']"]
-    bottom_order_button = [By.XPATH, ".//div[contains(@class, 'Home_FinishButton')]/button[text()='Заказать']"]
+
 
     name_field = [By.XPATH, ".//input[@placeholder='* Имя']"]
     surname_field = [By.XPATH, ".//input[@placeholder='* Фамилия']"]

@@ -1,51 +1,29 @@
-import pytest
 import allure
-import allure_pytest
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions
+from page_objects.base_page import BasePage
 
 
-class MainPage:
+class MainPage(BasePage):
 
-    #@allure.step('инициализация')
-    def __init__(self, driver):
-        self.driver = driver
+    @allure.step('Скроллим до вопроса, кликаем и ждем появления ответа')
+    def check_correct_answer_when_click_on_question(self, question_locator, answer_locator):
 
-    #@allure.step('Открываем страницу {url}')
-    def open_page(self, url):
-        self.driver.get(url)
+        self.scroll_page(question_locator)
+        self.wait_element(question_locator)
+        self.click_element(question_locator)
+        self.wait_element(answer_locator)
 
-    #@allure.step('Скроллим страницу до элемента {locator}')
-    def scroll_page(self, locator):
-        element = self.driver.find_element(*locator)
-        self.driver.execute_script("arguments[0].scrollIntoView();", element)
 
-    #@allure.step('Клик по элементу {locator}')
-    def click_element(self, locator):
-        self.driver.find_element(*locator).click()
+    @allure.step('Ожидаем загрузки элемента содержащего гиперссылку, кликаем по нему, вновь ожидаем загрузки элемента')
+    def main_page_redirect(self, main_page_link):
+        self.wait_element(main_page_link)
+        self.click_element(main_page_link)
+        self.wait_element(main_page_link)
 
-    #@allure.step('Получаем текст элемента {locator}')
-    def text_element(self, locator):
-        return self.driver.find_element(*locator).text
 
-    #@allure.step('Ожидание загрузки элемента {locator}')
-    def wait_element(self, locator):
-        WebDriverWait(self.driver, 5).until(expected_conditions.visibility_of_element_located(locator))
-
-   # @allure.step('Ожидание загрузки страницы {url}')
-    def wait_page(self, url):
-        WebDriverWait(self.driver, 5).until(expected_conditions.url_to_be(url))
-
-    #@allure.step('Получаем текущую страницу {url}')
-    def get_url(self):
-        return self.driver.current_url
-
-    #@allure.step('Переходим на вкладку с номером {tab_number}')
-    def open_tab(self, tab_number):
-        self.driver.switch_to.window(self.driver.window_handles[tab_number])
-
-    #@allure.step('Скроллим до элемента, ждем появления и кликаем {locator}')
-    def scroll_wait_click_element(self, locator):
-        self.scroll_page(locator)
-        self.wait_element(locator)
-        self.click_element(locator)
+    @allure.step('Ожидаем загрузки элемента содержащего гиперссылку, кликаем по нему, переключаемся на новую вкладку, '
+                 'ожидаем значение в адресной строке')
+    def external_redirect(self, ext_link, url):
+        self.wait_element(ext_link)
+        self.click_element(ext_link)
+        self.open_tab(1)
+        self.wait_page(url)

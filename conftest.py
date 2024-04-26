@@ -1,17 +1,12 @@
-import allure
-import allure_pytest
 import pytest
 from selenium import webdriver
-from data import ScooterData
+from settings import Settings
 
 
 @pytest.fixture(scope='function')
-#@allure.step('fixture')
 def driver():
     fox_driver = webdriver.Firefox()
     fox_driver.maximize_window()
-    fox_driver.get(ScooterData.MAIN_URL)
-
+    fox_driver.get(Settings.MAIN_URL)
     yield fox_driver
-
     fox_driver.quit()
